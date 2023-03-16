@@ -16,6 +16,8 @@ Emby Jellyfin 中文字幕插件 ，支持 迅雷影音、射手网、 精准匹
 ## 给个星星! ⭐️
 如果你喜欢这个项目或者它帮助你, 请给 Star~（辛苦咯）
 
+如果你能赞助稳定 Google Drive 团队盘用于媒体库插件测试, 请于我联系 91270#QQ.COM 
+
 
 &nbsp;
 
@@ -60,7 +62,7 @@ Emby Jellyfin 中文字幕插件 ，支持 迅雷影音、射手网、 精准匹
 
 ### 群晖
 ```bash
-复制插件文件到 /var/packages/EmbyServer/target/var/plugins
+复制插件文件到 /var/packages/EmbyServer/var/plugins
 复制插件文件到 /var/packages/EmbyServer/target/system/plugins
 重启服务
 ```
@@ -71,6 +73,13 @@ Emby Jellyfin 中文字幕插件 ，支持 迅雷影音、射手网、 精准匹
 复制插件文件到 /share/CACHEDEV1_DATA/.qpkg/EmbyServer/programdata/plugins
 复制插件文件到 /share/CACHEDEV1_DATA/.qpkg/EmbyServer/system/plugins
 重启服务
+```
+
+
+### Jellyfin 可通过存储库安装、更新插件
+```bash
+# 通过 控制台 -> 插件 -> 存储库 添加存储库 URL , 即可通过插件目录查看并安装插件
+https://github.com/91270/MeiamSubtitles.Release/raw/main/Plugin/manifest-stable.json
 ```
 
 &nbsp;

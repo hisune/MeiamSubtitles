@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyVersion>1.0.6.0</AssemblyVersion>
-    <FileVersion>1.0.6.0</FileVersion>
-    <Version>1.0.6</Version>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
+    <FileVersion>1.0.9.0</FileVersion>
+    <Version>1.0.9</Version>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -23,4 +23,7 @@
     <PackageReference Include="MediaBrowser.Common" Version="4.4.2" />
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.4.2" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="Copy $(TargetDir)$(TargetFileName) $(SolutionDir)$(ConfigurationName)\$(TargetFileName) /y&#xD;&#xA;" />
+  </Target>
 </Project>

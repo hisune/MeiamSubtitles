@@ -31,7 +31,7 @@ namespace Jellyfin.MeiamSub.Thunder
         private readonly ILogger<ThunderProvider> _logger;
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        public int Order => 0;
+        public int Order => 1;
         public string Name => "MeiamSub.Thunder";
 
         /// <summary>
@@ -80,6 +80,8 @@ namespace Jellyfin.MeiamSub.Thunder
 
             var cid = GetCidByFile(request.MediaPath);
 
+            _logger.LogInformation($"{Name} Search | FileHash -> { cid }");
+
             using var options = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -124,7 +126,8 @@ namespace Jellyfin.MeiamSub.Thunder
                             CommunityRating = Convert.ToSingle(m.rate),
                             ProviderName = $"{Name}",
                             Format = ExtractFormat(m.sname),
-                            Comment = $"Format : { ExtractFormat(m.sname)}  -  Rate : { m.rate }"
+                            Comment = $"Format : { ExtractFormat(m.sname)}  -  Rate : { m.rate }",
+                            IsHashMatch = true
                         }).OrderByDescending(m => m.CommunityRating);
                     }
                 }

@@ -32,7 +32,7 @@ namespace Emby.MeiamSub.Shooter
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IHttpClient _httpClient;
 
-        public int Order => 0;
+        public int Order => 1;
         public string Name => "MeiamSub.Shooter";
 
         /// <summary>
@@ -75,6 +75,12 @@ namespace Emby.MeiamSub.Shooter
         /// <returns></returns>
         private async Task<IEnumerable<RemoteSubtitleInfo>> SearchSubtitlesAsync(SubtitleSearchRequest request)
         {
+            if(request.Language == "zh-CN" || request.Language == "zh-TW" || request.Language == "zh-HK"){
+                request.Language = "chi";
+            }
+            if(request.Language == "en"){
+                request.Language = "eng";
+            }
             if (request.Language != "chi" && request.Language != "eng")
             {
                 return Array.Empty<RemoteSubtitleInfo>();
@@ -84,9 +90,11 @@ namespace Emby.MeiamSub.Shooter
 
             var hash = ComputeFileHash(fileInfo);
 
+            _logger.Info($"{Name} Search | FileHash -> { hash }");
+
             HttpRequestOptions options = new HttpRequestOptions
             {
-                Url = $"http://www.shooter.cn/api/subapi.php",
+                Url = $"https://www.shooter.cn/api/subapi.php",
                 UserAgent = $"{Name}",
                 TimeoutMs = 30000,
                 AcceptHeader = "*/*",
@@ -127,14 +135,14 @@ namespace Emby.MeiamSub.Shooter
                                     Url = subFile.Link,
                                     Format = subFile.Ext,
                                     Language = request.Language,
-                                    TwoLetterISOLanguageName = request.TwoLetterISOLanguageName,
                                     IsForced = request.IsForced
                                 })),
-                                Name = $"[MEIAMSUB] { Path.GetFileName(request.MediaPath) } | {request.TwoLetterISOLanguageName} | 射手",
+                                Name = $"[MEIAMSUB] { Path.GetFileName(request.MediaPath) } | {request.Language} | 射手",
                                 Author = "Meiam ",
                                 ProviderName = $"{Name}",
                                 Format = subFile.Ext,
-                                Comment = $"Format : { ExtractFormat(subFile.Ext)}"
+                                Comment = $"Format : { ExtractFormat(subFile.Ext)}",
+                                IsHashMatch = true
                             });
                         }
                     }
@@ -178,8 +186,6 @@ namespace Emby.MeiamSub.Shooter
             {
                 return new SubtitleResponse();
             }
-
-            downloadSub.Url = downloadSub.Url.Replace("https://www.shooter.cn", "http://www.shooter.cn");
 
             _logger.Info($"{Name} DownloadSub | Url -> { downloadSub.Url }  |  Format -> { downloadSub.Format } |  Language -> { downloadSub.Language } ");
 
